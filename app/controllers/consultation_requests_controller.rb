@@ -1,5 +1,4 @@
 class ConsultationRequestsController < ApplicationController
-    
   skip_before_action :verify_authenticity_token, only: [:create]
 
   def create
@@ -10,10 +9,10 @@ class ConsultationRequestsController < ApplicationController
       render json: @consultation_request.errors, status: :unprocessable_entity
     end
   end
-  
-   private
-  
+
+  private
+
   def consultation_request_params
-    params.require(:consultation_request).permit(:text, :patient_id)
+    params.require(:consultation_request).permit(:patient_id, :text)
   end
 end
