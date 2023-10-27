@@ -11,12 +11,17 @@ class RecommendationsController < ApplicationController
   def create
     @consultation_request = ConsultationRequest.find(params[:request_id])
     random_drug = OpenFDAAPI.random_drug_name
-    @recommendation = @consultation_request.build_recommendation(text: random_drug)
 
-    if @recommendation.save
-      render json: @recommendation, status: :created
+    if random_drug.present?
+      @recommendation = @consultation_request.build_recommendation(text: random_drug)
+  
+      if @recommendation.save
+        render json: @recommendation, status: :created
+      else
+        render json: @recommendation.errors, status: :unprocessable_entity
+      end
     else
-      render json: @recommendation.errors, status: :unprocessable_entity
+      render json: { error: "Не удалось получить информацию о лекарстве." }, status: :unprocessable_entity
     end
   end
 end
